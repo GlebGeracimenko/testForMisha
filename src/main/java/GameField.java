@@ -10,7 +10,7 @@ public class GameField {
     private int size;
 
     public enum Result {
-        WIN_x, WIN_Y, DRAW
+        WIN_X, WIN_O, DRAW
     }
 
     public GameField() {
@@ -25,17 +25,53 @@ public class GameField {
     public Result add(Model model) {
         field[model.getI()][model.getJ()] = model.getValue();
         size++;
-        if (size == 9) {
-            return Result.DRAW;
+        if (size > 4) {
+            return validate();
         }
         return null;
     }
 
     private Result validate() {
+        String res;
         for (int i = 0; i < field.length; i++) {
+            res = "";
             for (int j = 0; j < field[i].length; j++) {
-
+                res += field[i][j];
             }
+            if (res.equals("XXX")) {
+                return Result.WIN_X;
+            } else if (res.equals("OOO")) {
+                return Result.WIN_O;
+            }
+        }
+
+        for (int i = 0; i < field.length; i++) {
+            res = "";
+            for (int j = 0; j < field[i].length; j++) {
+                res += field[j][i];
+            }
+            if (res.equals("XXX")) {
+                return Result.WIN_X;
+            } else if (res.equals("OOO")) {
+                return Result.WIN_O;
+            }
+        }
+
+        res = "" + field[0][0] + field[1][1] + field[2][2];
+        if (res.equals("XXX")) {
+            return Result.WIN_X;
+        } else if (res.equals("OOO")) {
+            return Result.WIN_O;
+        }
+
+        res = "" + field[0][2] + field[1][1] + field[2][0];
+        if (res.equals("XXX")) {
+            return Result.WIN_X;
+        } else if (res.equals("OOO")) {
+            return Result.WIN_O;
+        }
+        if (size == 9) {
+            return Result.DRAW;
         }
         return null;
     }
